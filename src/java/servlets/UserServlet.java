@@ -1,15 +1,17 @@
 package servlets;
 
 import services.UserService;
-import models.User;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Users;
+import org.apache.tomcat.jni.User;
 
 public class UserServlet extends HttpServlet {
 
@@ -22,20 +24,20 @@ public class UserServlet extends HttpServlet {
         if (action != null && action.equals("view")) {
             String selectedUsername = request.getParameter("selectedUsername");
             try {
-                User user = us.get(selectedUsername);
+                Users user = us.get(selectedUsername);
                 request.setAttribute("selectedUser", user);
             } catch (Exception ex) {
                 Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
-        ArrayList<User> users = null;        
+        List<Users> user = null;        
         try {
-            users = (ArrayList<User>) us.getAll();
+            user = us.getAll();
         } catch (Exception ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        request.setAttribute("users", users);
+        request.setAttribute("users", user);
         getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
     }
 
@@ -65,9 +67,9 @@ public class UserServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Whoops.  Could not perform that action.");
         }
         
-        ArrayList<User> users = null;
+        List<Users> users = null;
         try {
-            users = (ArrayList<User>) us.getAll();
+            users = (List<Users>) us.getAll();
         } catch (Exception ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
